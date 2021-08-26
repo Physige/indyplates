@@ -59,47 +59,92 @@ class _HomeState extends State<Home> {
               bottom: PreferredSize(
                 // app bar height
                 preferredSize: Size.fromHeight(200),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xffF5EBEB),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-
-                      // search bar
-                      child: TextField(
-                        // search logic
-                        onChanged: (value) {
-                          setState(() {
-                            // loops through all name list, checks if name contains search, if so, add it to search list
-                            Plates.searchList =
-                              Plates.nameList
-                              .where((element) => element["name"].toLowerCase()
-                              .contains(value.toLowerCase()))
-                              .toList();
-                          });
-                        },
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          hintStyle: TextStyle(
-                            fontFamily: "Segoe UI",
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xff715656)
+                child: Column(
+                  children: [
+                    // plate counter
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children:[
+                        SizedBox(
+                          height: 126,
+                          child: Text(
+                            // number left - takes length of namelist and subtracts the length of selected
+                            (Plates.nameList.length - Plates.selectedPlates.length).toString(),
+                            // "1",
+                            // "10",
+                            // "100",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xffff8080),
+                              fontSize: 96,
+                              fontFamily: "Segoe UI",
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
-                          hintText: "Search",
-                          fillColor: Colors.transparent,
-                          border: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
                         ),
-                      )
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 260,
+                          height: 47,
+                          child: Text(
+                            // license plate text - changes plural to singular if 1 left
+                            Plates.selectedPlates.length == Plates.nameList.length - 1 ? "License Plate Left" : "License Plates Left",
+                            style: TextStyle(
+                              color: Color(0xff705656),
+                              fontSize: 30,
+                              fontFamily: "Segoe UI",
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffF5EBEB),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+
+                          // search bar
+                          child: TextField(
+                            // search logic
+                            onChanged: (value) {
+                              setState(() {
+                                // loops through all name list, checks if name contains search, if so, add it to search list
+                                Plates.searchList =
+                                  Plates.nameList
+                                  .where((element) => element["name"].toLowerCase()
+                                  .contains(value.toLowerCase()))
+                                  .toList();
+                              });
+                            },
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              hintStyle: TextStyle(
+                                fontFamily: "Segoe UI",
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff715656)
+                              ),
+                              hintText: "Search",
+                              fillColor: Colors.transparent,
+                              border: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                          )
+                        ),
+                      ),
+                    ),
+                  ]
                 ),
               ),
             )
