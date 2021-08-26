@@ -65,6 +65,8 @@ flutter:
         - asset: fonts/segoeui.ttf
         - asset: fonts/seguisb.ttf
           weight: 500
+        - asset: fonts/segoeuib.ttf
+          weight: 800
 
   #
   # For details regarding fonts from package dependencies,
