@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children:[
                         SizedBox(
-                          height: 126,
+                          height: 100,
                           child: Text(
                             // number left - takes length of namelist and subtracts the length of selected
                             (Plates.nameList.length - Plates.selectedPlates.length).toString(),
@@ -78,22 +78,21 @@ class _HomeState extends State<Home> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xffff8080),
-                              fontSize: 96,
+                              fontSize: 70,
                               fontFamily: "Segoe UI",
                               fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
-                        SizedBox(width: 50),
+                        SizedBox(width: 45),
                         SizedBox(
-                          width: 260,
                           height: 47,
                           child: Text(
                             // license plate text - changes plural to singular if 1 left
                             Plates.selectedPlates.length == Plates.nameList.length - 1 ? "License Plate Left" : "License Plates Left",
                             style: TextStyle(
                               color: Color(0xff705656),
-                              fontSize: 30,
+                              fontSize: 25,
                               fontFamily: "Segoe UI",
                               fontWeight: FontWeight.w800,
                             ),
@@ -160,7 +159,7 @@ class _HomeState extends State<Home> {
           itemBuilder: (BuildContext ctx, index) {
             // each card
             return Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(7),
               child: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -179,19 +178,17 @@ class _HomeState extends State<Home> {
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   alignment: Alignment.center,
-                  width: 180,
-                  height: 180,
                   decoration: BoxDecoration(
                     border: Border.all(
                       // checks if plate is in the selected plate list, if so, set the border to green, if not, set it transparent
                       color: Plates.selectedPlates.contains(getPlate("name", index)) ? Colors.green[500] : Colors.transparent,
-                      width: 12,
+                      width: 10,
                     ),
-                    borderRadius: BorderRadius.circular(45),
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         color: Color(0x3f000000),
-                        blurRadius: 15,
+                        blurRadius: 16,
                         spreadRadius: -9,
                         offset: Offset(0, 2),
                       ),
@@ -205,8 +202,8 @@ class _HomeState extends State<Home> {
                     children:[
                       // image
                       Container(
-                        width: 160,
-                        height: 80,
+                        width: 120,
+                        height: 60,
                         // image shadow
                         decoration: BoxDecoration(
                           boxShadow: [
@@ -224,18 +221,24 @@ class _HomeState extends State<Home> {
                       ),
                       SizedBox(height: 15),
                       // name
-                      Container(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: Text(
-                          // plate name
-                          // builder loops through all names and displays plate name
-                          getPlate("name", index),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xff715656),
-                            fontSize: 18,
-                            fontFamily: "Segoe UI",
-                            fontWeight: FontWeight.w700,
+                      // flexible lets text overflow
+                      Flexible(
+                        // scroll view lets overflowed text to scroll so you can see the entire name
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Text(
+                              // plate name
+                              // builder loops through all names and displays plate name
+                              getPlate("name", index),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xff715656),
+                                fontSize: 15,
+                                fontFamily: "Segoe UI",
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -250,7 +253,7 @@ class _HomeState extends State<Home> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Color(0xff715656),
-                              fontSize: 16,
+                              fontSize: 12,
                               fontFamily: "Segoe UI",
                           ),
                         ),
