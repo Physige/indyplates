@@ -1,21 +1,39 @@
 import "package:flutter/material.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 import 'plates.dart';
-/* TODO:
-- clean up code
-- clean up fonts
-- comment
-- filter
-- to top
-- save selections
-- add animations
-*/
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    super.initState();
+
+    // gets saved list of selected plates
+    _readPlates();
+  }
+
   TextEditingController _searchController = TextEditingController();
+
+  // pulls saved plates list from shared prefs
+  _readPlates() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // updates selected plates list
+    Plates.selectedPlates = prefs.getStringList("savedPlates") ?? 0;
+
+    // updates state once plates load
+    setState(() {});
+  }
+
+  // adds updated selected plates list to shared prefs
+  _savePlates() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("savedPlates", Plates.selectedPlates);
+  }
 
   // returns proper plate info based off appropriate list
   String getPlate(info, index) {
@@ -117,6 +135,7 @@ class _HomeState extends State<Home> {
                             onChanged: (value) {
                               setState(() {
                                 // loops through all name list, checks if name contains search, if so, add it to search list
+                                // search list contains list of all plates that fit search query
                                 Plates.searchList =
                                   Plates.nameList
                                   .where((element) => element["name"].toLowerCase()
@@ -126,13 +145,13 @@ class _HomeState extends State<Home> {
                             },
                             controller: _searchController,
                             decoration: InputDecoration(
-                              filled: true,
+                              hintText: "Search",
                               hintStyle: TextStyle(
                                 fontFamily: "Segoe UI",
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xff715656)
                               ),
-                              hintText: "Search",
+                              filled: true,
                               fillColor: Colors.transparent,
                               border: InputBorder.none,
                               errorBorder: InputBorder.none,
@@ -149,6 +168,7 @@ class _HomeState extends State<Home> {
             )
           ];
         },
+        
         // grid contains all plate cards
         body: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -172,6 +192,9 @@ class _HomeState extends State<Home> {
                       // adds plate if not already selected
                       Plates.selectedPlates.add(getPlate("name", index));
                     }
+                    
+                    // whenever new plate is selected or removed, saves new plate list
+                    _savePlates();
                   });
                 },
                 // animated container allows for fade on border
@@ -252,9 +275,9 @@ class _HomeState extends State<Home> {
                           getPlate("type", index),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: Color(0xff715656),
-                              fontSize: 12,
-                              fontFamily: "Segoe UI",
+                            color: Color(0xff715656),
+                            fontSize: 12,
+                            fontFamily: "Segoe UI",
                           ),
                         ),
                       ),
