@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
         Plates.nameList.sort((a, b) => a["name"].compareTo(b["name"]));
       } else if (method == "ZA") {
         // sorts by cba
-        Plates.nameList.sort((b, a) => a["name"].compareTo(b["name"]));
+        Plates.nameList.sort((a, b) => b["name"].compareTo(a["name"]));
       } else if (method == "SlecUnslec") {
         // sorts selected at top and unselected at bottom
         // loops through nameList, if its in the selectedList, move to top of nameList
@@ -234,36 +234,49 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.all(8),
                       child: Align(
                         alignment: Alignment.topLeft,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xffF5EBEB),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-
-                          // search bar
-                          child: TextField(
-                            // search logic
-                            onChanged: (value) {
-                              setState(() {
-                                // loops through all name list, checks if name contains search, if so, add it to search list
-                                // search list contains list of all plates that fit search query
-                                Plates.searchList =
-                                  Plates.nameList
-                                  .where((element) => element["name"].toLowerCase()
-                                  .contains(value.toLowerCase()))
-                                  .toList();
-                              });
-                            },
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              hintText: "Search",
-                              hintStyle: TextStyle(
-                                fontFamily: "Segoe UI",
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff715656)
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xffF5EBEB),
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              // filter button
-                              suffixIcon: IconButton(
+
+                              // search bar
+                              child: TextField(
+                                // search logic
+                                onChanged: (value) {
+                                  setState(() {
+                                    // loops through all name list, checks if name contains search, if so, add it to search list
+                                    // search list contains list of all plates that fit search query
+                                    Plates.searchList =
+                                      Plates.nameList
+                                      .where((element) => element["name"].toLowerCase()
+                                      .contains(value.toLowerCase()))
+                                      .toList();
+                                  });
+                                },
+                                controller: _searchController,
+                                decoration: InputDecoration(
+                                  hintText: "Search",
+                                  hintStyle: TextStyle(
+                                    fontFamily: "Segoe UI",
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xff715656)
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  border: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              )
+                            ),
+                            // filter button
+                            Positioned(
+                              left: 325,
+                              child: IconButton(
                                 icon: Icon(
                                   Icons.filter_alt_rounded,
                                   color: Color(0xff715656),
@@ -274,15 +287,9 @@ class _HomeState extends State<Home> {
                                   showFilterMenu(context);
                                 },
                               ),
-                              filled: true,
-                              fillColor: Colors.transparent,
-                              border: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
                             ),
-                          )
-                        ),
+                          ]
+                        )
                       ),
                     ),
                   ]
