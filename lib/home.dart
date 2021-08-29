@@ -8,6 +8,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // runs on start
   @override
   void initState() {
     super.initState();
@@ -63,6 +64,116 @@ class _HomeState extends State<Home> {
       } 
     }
     return("error");
+  }
+
+  // sorts the plates list of maps
+  void sort(method) {
+    // updates display after nameList is sorted
+    setState(() {
+      if (method == "AZ") {
+        // sorts by abc
+        Plates.nameList.sort((a, b) => a["name"].compareTo(b["name"]));
+      } else if (method == "ZA") {
+        // sorts by cba
+        Plates.nameList.sort((b, a) => a["name"].compareTo(b["name"]));
+      } else if (method == "SlecUnslec") {
+        // sorts selected at top and unselected at bottom
+        // loops through nameList, if its in the selectedList, move to top of nameList
+        for (int i = 0; i < Plates.nameList.length; i++) {
+          if (Plates.selectedPlates.contains(Plates.nameList[i]["name"])) {
+            // moves plate to top
+            Map currPlate = Plates.nameList[i];
+            Plates.nameList.removeAt(i);
+            Plates.nameList.insert(0, currPlate);
+          }
+        }
+      } else if (method == "UnslecSlec") {
+        // sorts unselected at top and selected at bottom
+        // loops through nameList, if its not in the selectedList, move to top of nameList
+        for (int i = 0; i < Plates.nameList.length; i++) {
+          if (!Plates.selectedPlates.contains(Plates.nameList[i]["name"])) {
+            // moves plate to top
+            Map currPlate = Plates.nameList[i];
+            Plates.nameList.removeAt(i);
+            Plates.nameList.insert(0, currPlate);
+          }
+        }
+      }
+    });
+  }
+
+  // alert dialong that contains filter selections
+  void showFilterMenu(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Filter by:"),
+      content: SizedBox(
+        height: 200,
+        child: Column(
+          children: [
+            TextButton(
+              child: Text(
+                "A → Z",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xffff8080)
+                ),
+              ),
+              onPressed: () {
+                sort("AZ");
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text(
+                "Z → A",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xffff8080)
+                ),
+              ),
+              onPressed: () {
+                sort("ZA");
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text(
+                "Unselected → Selected",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xffff8080)
+                ),
+              ),
+              onPressed: () {
+                sort("UnslecSlec");
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text(
+                "Selected → Unselected",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xffff8080)
+                ),
+              ),
+              onPressed: () {
+                sort("SlecUnslec");
+                Navigator.pop(context, false);
+              },
+            ),
+          ],
+        )
+      )
+    );
+
+    // shows the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
@@ -150,6 +261,18 @@ class _HomeState extends State<Home> {
                                 fontFamily: "Segoe UI",
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xff715656)
+                              ),
+                              // filter button
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.filter_alt_rounded,
+                                  color: Color(0xff715656),
+                                  size: 25,
+                                ),
+                                // opens the filter menu on pressed
+                                onPressed: () {
+                                  showFilterMenu(context);
+                                },
                               ),
                               filled: true,
                               fillColor: Colors.transparent,
